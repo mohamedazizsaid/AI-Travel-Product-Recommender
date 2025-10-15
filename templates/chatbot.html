@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>💬 Chatbot Comparateur</title>
+    <style>
+        body {
+            background: #f4f4f9;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        .chatbox {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .message {
+            margin: 10px 0;
+        }
+        .user { text-align: right; color: #007BFF; }
+        .bot { text-align: left; color: #333; }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chatbot Comparateur de Prix</h1>
+    <div class="chatbox" id="chatbox">
+        <div class="message bot">👋 Bonjour ! Posez-moi une question sur un produit électronique.</div>
+    </div>
+    <input type="text" id="userInput" placeholder="Ex: ordinateur Dell, Samsung Galaxy...">
+    <button onclick="sendMessage()">Envoyer</button>
+
+    <script>
+        function sendMessage() {
+            let input = document.getElementById("userInput");
+            let message = input.value;
+            if (message.trim() === "") return;
+
+            let chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML += `<div class='message user'>${message}</div>`;
+            input.value = "";
+
+            fetch("/ask", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatbox.innerHTML += `<div class='message bot'>${data.response}</div>`;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            });
+        }
+    </script>
+</body>
+</html>

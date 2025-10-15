@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Hotel</title>
+</head>
+<body>
+    <h1>🏨 Select a Hotel in {{ city }}</h1>
+
+    <form method="POST">
+        <label for="hotel_name">Hotel:</label>
+        <select name="hotel_name" id="hotel_name" required>
+            <option value="">-- Choose a hotel --</option>
+            {% for hotel in hotel_list %}
+                <option value="{{ hotel }}" {% if hotel == selected_hotel %}selected{% endif %}>{{ hotel }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">📊 Generate Forecast</button>
+    </form>
+
+    {% if forecast_plot %}
+        <h2>🔮 Forecast for {{ selected_hotel }}</h2>
+        <img src="{{ url_for('static', filename=forecast_plot.split('/')[-1]) }}" alt="Forecast Plot">
+    {% endif %}
+
+    <br><br>
+    <a href="{{ url_for('select_city') }}">
+        <button type="button">⬅️ Back to City Selection</button>
+    </a>
+</body>
+</html>

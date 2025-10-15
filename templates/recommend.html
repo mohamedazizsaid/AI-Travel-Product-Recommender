@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Recommendations</title>
+</head>
+<body>
+    <h1>🧠 Select Products You Like</h1>
+    <form method="POST">
+        <label>Select at least 5 products:</label><br><br>
+        <select name="selected_products" multiple size="10" required>
+            {% for product in product_list %}
+                <option value="{{ product['id'] }}">{{ product['name'] }}</option>
+            {% endfor %}
+        </select><br><br>
+        <button type="submit">🔍 Recommend</button>
+    </form>
+
+    {% if recommendations %}
+        <h2>🎯 Recommended Products:</h2>
+        <ul>
+            {% for rec in recommendations %}
+                <li>{{ rec }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('home') }}">⬅ Back to Home</a>
+</body>
+</html>

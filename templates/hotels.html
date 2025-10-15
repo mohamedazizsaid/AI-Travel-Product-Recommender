@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🏨 Hotel Forecast</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        select, button {
+            padding: 8px;
+            font-size: 14px;
+            width: 200px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 80%;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏨 Hotel Price Forecast</h1>
+
+    <form method="POST">
+        <label for="city">🌍 Select a City:</label>
+        <br>
+        <select name="city" id="city" required>
+            <option value="">-- Choose a city --</option>
+            {% for city in cities %}
+                <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label for="hotel_name">🏨 Select a Hotel:</label>
+        <br>
+        <select name="hotel_name" id="hotel_name" required {% if not selected_hotel %}disabled{% endif %}>
+            {% if selected_hotel %}
+                <option value="{{ selected_hotel }}" selected>{{ selected_hotel }}</option>
+            {% else %}
+                <option value="">-- Choose a hotel --</option>
+            {% endif %}
+        </select>
+
+        <br><br>
+        <button type="submit">🔍 Search</button>
+        <br><br>
+        <a href="{{ url_for('home') }}"><button type="button">⬅️ Back to Home</button></a>
+    </form>
+
+    {% if forecast_plot %}
+        <h2>📊 Forecast for {{ selected_hotel }}</h2>
+        <img src="{{ url_for('static', filename=forecast_plot.split('/')[-1]) }}?v={{ uuid.uuid4() }}" alt="Forecast plot">
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            $('#hotel_name').select2();  // initialize Select2 on load
+
+            $('#city').on('change', function () {
+                const city = $(this).val();
+                const hotelDropdown = $('#hotel_name');
+
+                hotelDropdown.prop('disabled', true).html('<option value="">Loading...</option>');
+
+                if (city) {
+                    $.getJSON(`/get_hotels/${encodeURIComponent(city)}`, function (data) {
+                        console.log("✅ Hotels received for", city, ":", data.hotels);
+
+                        let options = '<option value="">-- Select a hotel --</option>';
+                        data.hotels.forEach(function (name) {
+                            options += `<option value="${name}">${name}</option>`;
+                        });
+
+                        hotelDropdown.html(options).prop('disabled', false).select2();  // re-apply Select2
+                    }).fail(function (jqxhr, textStatus, error) {
+                        console.error("❌ Failed to load hotels:", textStatus, error);
+                        hotelDropdown.html('<option value="">Error loading hotels</option>');
+                    });
+                } else {
+                    hotelDropdown.html('<option value="">-- Select a hotel --</option>').prop('disabled', true);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

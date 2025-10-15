@@ -1,0 +1,44 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>📦 Product Forecast</title>
+</head>
+<body style="font-family: Arial, sans-serif;">
+
+    <a href="{{ url_for('home') }}">
+        <button style="margin: 20px;">⬅️ Back to Home</button>
+    </a>
+
+    <h1 style="text-align: center;">📦 Product Price Forecast</h1>
+
+    <form method="post" style="text-align: center; margin-bottom: 30px;">
+        <select name="product_name" required style="padding: 10px; width: 300px;">
+            {% for product in product_list %}
+            <option value="{{ product }}">{{ product }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" style="padding: 10px;">🔍 Predict</button>
+    </form>
+
+    {% if selected_product %}
+        <h2 style="text-align: center;">Selected Product: {{ selected_product }}</h2>
+
+        {% if history_plot %}
+            <h3 style="text-align: center;">📈 Historical Prices</h3>
+            <div style="text-align: center;">
+                <img src="{{ url_for('static', filename='history.png') }}" width="700">
+            </div>
+        {% endif %}
+
+        {% if forecast_plot %}
+            <h3 style="text-align: center;">🔮 Price Forecast</h3>
+            <div style="text-align: center;">
+                <img src="{{ url_for('static', filename='forecast.png') }}" width="700">
+            </div>
+        {% endif %}
+    {% endif %}
+
+</body>
+</html>

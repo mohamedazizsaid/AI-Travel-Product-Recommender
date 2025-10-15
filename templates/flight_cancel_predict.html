@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✈️bienvenue✈️</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background: url('https://img.freepik.com/free-photo/wing-airplane-with-city-background_1232-1308.jpg?ga=GA1.1.805985661.1745278576&semt=ais_hybrid&w=740') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      background: rgba(242, 244, 241, 0.95);
+      border-radius: 12px;
+      padding: 40px;
+      margin: 50px auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      max-width: 700px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #28a745;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: 500;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button, input[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      font-size: 18px;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover, input[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #e9ffe9;
+      border-left: 5px solid #28a745;
+      border-radius: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control:focus {
+      border-color: #28a745;
+      box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #f5c6cb;
+    }
+
+    .text {
+      display: block;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        padding: 20px;
+        margin: 20px;
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      label {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✈️ Prédiction si un vol sera annulé</h1>
+    <hr>
+
+    <form method="POST" class="form" action="/flight_cancel">
+
+      <div class="form-group">
+
+        <!-- Menu déroulant compagnie aérienne -->
+        <label for="compagnie">Compagnie aérienne :</label>
+        <select id="compagnie" name="Compagnie" class="form-control" required>
+          <option value="" disabled selected>-- Sélectionnez une compagnie --</option>
+          <option value="Nouvelair">Nouvelair</option>
+          <option value="Tunisair">Tunisair</option>
+        </select>
+        <br>
+
+        <label for="distance_vol">Distance du vol (KM):</label>
+        <input type="number" id="distance_vol" name="Distance_Vol_KM" class="form-control" required><br>
+
+        <label for="escales">Nombre d'escales:</label>
+        <input type="number" id="escales" name="Nombre_Escales" class="form-control" required><br>
+
+        <label for="saison_touristique" class="text">Saison touristique <br> (0 = Hors saison, 1 = Moyenne, 2 = Haute):</label>
+        <input type="number" id="saison_touristique" name="Saison_Touristique" class="form-control" min="0" max="2" required><br>
+
+        <input type="submit" value="Prédire" class="btn btn-success mt-3">
+      </div>
+    </form>
+
+    {% if prediction %}
+      <div class="result mt-4">
+        <h2>Prédit annulation</h2>
+        <p><strong>{{ prediction }}</strong></p>
+      </div>
+    {% endif %}
+
+    {% if error %}
+      <div class="alert alert-danger mt-3">
+        {{ error }}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

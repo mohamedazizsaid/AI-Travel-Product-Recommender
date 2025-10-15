@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 30px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+form select, form button {
+    padding: 10px;
+    margin: 10px;
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.menu {
+    margin-top: 30px;
+}
+
+img {
+    margin-top: 20px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
